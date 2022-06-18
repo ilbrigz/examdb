@@ -1,0 +1,47 @@
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Quiz {
+  id           Int        @id @default(autoincrement())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  checkCount   Int        @default(0)
+  mistakeCount Int        @default(0)
+  questions    Question[]
+}
+
+model Question {
+  id              Int       @id @default(autoincrement())
+  text            String    @unique
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  category        Category? @relation(fields: [categoryId], references: [id])
+  categoryId      Int?      @unique
+  quizes          Quiz[]
+  choices         Choice[]
+  correctChoice   Choice?   @relation("correctItem", fields: [correctChoiceId], references: [id])
+  correctChoiceId Int?
+  checkCount      Int       @default(0)
+  mistakeCount    Int       @default(0)
+}
+
+model Choice {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  correctItem Question[] @relation("correctItem")
+  questions   Question[]
+
+}
+
+model Category {
+  id       Int        @id @default(autoincrement())
+  name     String
+  Question Question[]
+}
