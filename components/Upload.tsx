@@ -21,6 +21,10 @@ export default function PrivatePage({
 }) {
   const [image, setImage] = useState('');
 
+  const origin =
+    typeof window !== 'undefined' && window.location.origin
+      ? window.location.origin
+      : '';
   const uploadToClient = (event: any) => {
     if (event.target.files && event.target.files[0]) {
       const i = event.target.files[0];
@@ -74,7 +78,7 @@ export default function PrivatePage({
               value={image.url}
               label={
                 <img
-                  src={'http://localhost:3000/' + image.url}
+                  src={origin + '/' + image.url}
                   style={{ maxWidth: '100px' }}
                 />
               }
