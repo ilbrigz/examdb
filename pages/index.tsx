@@ -81,6 +81,7 @@ const Home: NextPage = () => {
       ...(category && { category }),
       hint,
     };
+    console.log(data);
     try {
       const r = await fetcher('/q', data);
 

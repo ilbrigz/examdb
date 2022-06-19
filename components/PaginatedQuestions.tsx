@@ -210,105 +210,112 @@ function PaginatedQuestions({ count = 20 }) {
                 />
               ))}
             </RadioGroup>
-            <Text
-              mt={20}
-              style={{
-                color: item.isCorrect ? 'green' : 'red',
-                textAlign: 'right',
-              }}
-            >
-              {item.isCorrect
-                ? `${item.checkCount + 1}/${
-                    item.checkCount + item.mistakeCount + 1
-                  }`
-                : `${item.checkCount}/${
-                    item.checkCount + item.mistakeCount + 1
-                  }`}
-            </Text>
-            {submitted && (
-              <div
-                style={{
-                  backgroundColor: '#bcedb7',
-                  padding: '5px',
-                  borderRadius: '5px',
-                }}
-              >
-                {item.hint && <Text mt={10}>Hint: {item.hint}</Text>}
 
-                {!isEditingHint ? (
-                  item.hint ? (
-                    <ActionIcon
-                      color="dark"
-                      variant="default"
-                      mt={20}
-                      onClick={() => {
-                        setEditingHint(item.hint);
-                        setIsEditingHing(true);
-                      }}
-                    >
-                      <Pencil />
-                    </ActionIcon>
+            {submitted && (
+              <>
+                <Text
+                  mt={20}
+                  style={{
+                    color: item.isCorrect ? 'green' : 'red',
+                    textAlign: 'right',
+                  }}
+                >
+                  {item.isCorrect
+                    ? `${item.checkCount + 1}/${
+                        item.checkCount + item.mistakeCount + 1
+                      }`
+                    : `${item.checkCount}/${
+                        item.checkCount + item.mistakeCount + 1
+                      }`}
+                </Text>
+                <div
+                  style={{
+                    backgroundColor: '#bcedb7',
+                    padding: '5px',
+                    borderRadius: '5px',
+                  }}
+                >
+                  {item.hint && (
+                    <Text mt={10}>
+                      Hint: {item.hint.replace('\n', '<br/>')}
+                    </Text>
+                  )}
+
+                  {!isEditingHint ? (
+                    item.hint ? (
+                      <ActionIcon
+                        color="dark"
+                        variant="default"
+                        mt={20}
+                        onClick={() => {
+                          setEditingHint(item.hint);
+                          setIsEditingHing(true);
+                        }}
+                      >
+                        <Pencil />
+                      </ActionIcon>
+                    ) : (
+                      <Button
+                        mt={20}
+                        variant="default"
+                        color="dark"
+                        radius="xl"
+                        size="xs"
+                        onClick={() => {
+                          setIsEditingHing(true);
+                        }}
+                      >
+                        Add some Hint
+                      </Button>
+                    )
                   ) : (
-                    <Button
-                      mt={20}
-                      variant="default"
-                      color="dark"
-                      radius="xl"
-                      size="xs"
-                      onClick={() => {
-                        setIsEditingHing(true);
-                      }}
-                    >
-                      Add some Hint
-                    </Button>
-                  )
-                ) : (
-                  <>
-                    <Textarea
-                      placeholder="Hint"
-                      size="sm"
-                      value={editingHint}
-                      required
-                      onChange={(e) => setEditingHint(e.target.value)}
-                      autosize={true}
-                      maxRows={20}
-                      minRows={1}
-                      ml={10}
-                    />
-                    <Button
-                      mt={20}
-                      variant="default"
-                      color="dark"
-                      radius="xl"
-                      size="xs"
-                      onClick={async () => {
-                        const r = await fetcher('/single_question/hint', {
-                          id: item.id,
-                          hint: editingHint,
-                        });
-                        let t = [...questions];
-                        t[active]['hint'] = r.msg.hint;
-                        setQuestions(t);
-                        setIsEditingHing(false);
-                      }}
-                    >
-                      Confirm
-                    </Button>
-                    <Button
-                      mt={20}
-                      variant="light"
-                      color="red"
-                      radius="xl"
-                      size="xs"
-                      onClick={async () => {
-                        setIsEditingHing(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                )}
-              </div>
+                    <>
+                      <Textarea
+                        placeholder="Hint"
+                        size="sm"
+                        value={editingHint}
+                        required
+                        onChange={(e) => setEditingHint(e.target.value)}
+                        autosize={true}
+                        maxRows={20}
+                        minRows={1}
+                        ml={10}
+                      />
+                      <Button
+                        mt={20}
+                        variant="default"
+                        color="dark"
+                        radius="xl"
+                        size="xs"
+                        onClick={async () => {
+                          const r = await fetcher('/single_question/hint', {
+                            id: item.id,
+                            hint: editingHint,
+                          });
+                          let t = [...questions];
+                          t[active]['hint'] = r.msg.hint;
+                          setQuestions(t);
+                          setIsEditingHing(false);
+                        }}
+                      >
+                        Confirm
+                      </Button>
+                      <Button
+                        mt={20}
+                        variant="light"
+                        color="red"
+                        radius="xl"
+                        size="xs"
+                        onClick={async () => {
+                          setIsEditingHing(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </>
             )}
           </Stepper.Step>
         ))}
