@@ -236,9 +236,12 @@ function PaginatedQuestions({ count = 20 }) {
                   }}
                 >
                   {item.hint && (
-                    <Text mt={10}>
-                      Hint: {item.hint.replace('\n', '<br/>')}
-                    </Text>
+                    <Text
+                      mt={10}
+                      dangerouslySetInnerHTML={{
+                        __html: 'Hint :' + item.hint.replace(/\n/g, '<br/>'),
+                      }}
+                    ></Text>
                   )}
 
                   {!isEditingHint ? (
