@@ -1,14 +1,18 @@
+import { Prisma } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../lib/prisma';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const { choices, text, category, correctChoice } = req.body;
+    const { choices, text, category, correctChoice, imgUrl, hint } = req.body;
     // Process a POST request
     try {
+      type NewType = Prisma.ImageCreateOrConnectWithoutQuestionInput;
+
       const Question = await prisma.question.create({
         data: {
           text,
+          hint: !!hint ? hint : undefined,
           choices: {
             connectOrCreate: choices.map((c: string) => {
               return {
@@ -29,6 +33,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                       name: category.name,
                     },
                   }
+                : undefined,
+          },
+          img: {
+            connectOrCreate:
+              imgUrl !== undefined
+                ? ({
+                    where: {
+                      url: imgUrl,
+                    },
+                    create: {
+                      url: imgUrl,
+                    },
+                  } as NewType)
                 : undefined,
           },
         },
@@ -54,9 +71,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     return;
   } else if (req.method === 'GET') {
+    const limit: any = req.query.limit;
     const Questions = await prisma.question.findMany({
+      orderBy: { id: 'desc' },
+      take: limit ? parseInt(limit) : undefined,
       include: {
         choices: true, // Return all fields
+        img: true,
       },
     });
     res.json({ result: Questions });

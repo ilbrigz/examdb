@@ -10,6 +10,8 @@ import {
 import { Check } from 'tabler-icons-react';
 import fetcher from '../lib/fetcher';
 import { useState, useRef, useEffect } from 'react';
+import Upload from '../components/Upload';
+import QuestionsPreview from '../components/QuestionsPreview';
 
 const Home: NextPage = () => {
   const [q, setQ] = useState('');
@@ -19,6 +21,12 @@ const Home: NextPage = () => {
   const [d, setD] = useState('');
   const [e, setE] = useState('');
   const [correctChoice, setCorrectChoice] = useState('');
+  const [createObjectURL, setCreateObjectURL] = useState<any>(null);
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageArray, setImageArray] = useState([]);
+  const [hint, setHint] = useState('');
+  const [category, setCategory] = useState('');
+  const [reload, setReaload] = useState(Math.random());
   const onSelectCorrectItem = (ltr: string) => {
     switch (ltr) {
       case 'a':
@@ -41,6 +49,7 @@ const Home: NextPage = () => {
         break;
     }
   };
+
   const addQuestion = async () => {
     if (!q || !a || !b || !c || !d) {
       alert('fill in the required fields');
@@ -68,6 +77,9 @@ const Home: NextPage = () => {
       text: q,
       choices: [a, b, c, d, ...(e ? [e] : [])],
       correctChoice: lookup[correctChoice],
+      ...(imageUrl && { imgUrl: imageUrl }),
+      ...(category && { category }),
+      hint,
     };
     try {
       const r = await fetcher('/q', data);
@@ -87,9 +99,22 @@ const Home: NextPage = () => {
     setD('');
     setE('');
     setCorrectChoice('');
+    setImageUrl('');
+    setCreateObjectURL('');
+    setImageArray([]);
+    setHint('');
+    setReaload(Math.random());
   };
   return (
     <Container>
+      <Upload
+        setImageUrl={setImageUrl}
+        imageUrl={imageUrl}
+        createObjectURL={createObjectURL}
+        setCreateObjectURL={setCreateObjectURL}
+        imageArray={imageArray}
+        setImageArray={setImageArray}
+      />
       <Textarea
         placeholder="Copy question here"
         label="Question"
@@ -205,9 +230,8 @@ const Home: NextPage = () => {
         </ActionIcon>
         <Textarea
           placeholder="Copy question here"
-          label="Option D"
+          label="Option E (not required)"
           size="sm"
-          required
           value={e}
           autosize={true}
           maxRows={20}
@@ -221,6 +245,7 @@ const Home: NextPage = () => {
         placeholder="Copy question here"
         label="Hint"
         size="xs"
+        value={hint}
         autosize={true}
         maxRows={20}
         minRows={1}
@@ -229,11 +254,13 @@ const Home: NextPage = () => {
           label: { color: 'green' },
           input: { color: 'green' },
         }}
+        onChange={(e) => setHint(e.target.value)}
       />
       <Button mt={20} onClick={addQuestion}>
         {' '}
         Create Question{' '}
       </Button>
+      <QuestionsPreview reload={reload} />
     </Container>
   );
 };

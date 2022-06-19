@@ -30,6 +30,9 @@ model Question {
   correctChoiceId Int?
   checkCount      Int       @default(0)
   mistakeCount    Int       @default(0)
+  hint            String?
+  img             Image?    @relation(fields: [imgId], references: [id])
+  imgId           Int?
 }
 
 model Choice {
@@ -44,4 +47,11 @@ model Category {
   id       Int        @id @default(autoincrement())
   name     String
   Question Question[]
+}
+
+model Image {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  url       String     @unique
+  Question  Question[]
 }
