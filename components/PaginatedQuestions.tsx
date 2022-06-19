@@ -53,7 +53,7 @@ function PaginatedQuestions({ count = 20 }) {
 
   useEffect(() => {
     const f = async () => {
-      const r = await fetcher(`/q?limit=${count}`);
+      const r = await fetcher(`/multi_question?limit=${count}`);
       setQuestions(r.result);
     };
     f();
