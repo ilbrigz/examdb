@@ -112,7 +112,9 @@ function PaginatedQuestions({ count = 20 }) {
           steps: {
             display: 'flex',
             flexWrap: 'wrap',
-
+            '@media (max-width: 768px)': {
+              flexDirection: 'row',
+            },
             div: {
               margin: '0 3px',
             },
@@ -239,7 +241,7 @@ function PaginatedQuestions({ count = 20 }) {
                     <Text
                       mt={10}
                       dangerouslySetInnerHTML={{
-                        __html: 'Hint :' + item.hint.replace(/\n/g, '<br/>'),
+                        __html: item.hint.replace(/\n/g, '<br/>'),
                       }}
                     ></Text>
                   )}
