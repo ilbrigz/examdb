@@ -15,7 +15,7 @@ const QuestionsPreview = ({ count = 3, reload }: Props) => {
       setQuestions(r.result);
     };
     f();
-  }, [reload]);
+  }, [reload, count]);
   return (
     <Accordion>
       <pre>{JSON.stringify(questions, null, 2)}</pre>

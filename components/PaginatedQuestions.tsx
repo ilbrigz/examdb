@@ -57,7 +57,7 @@ function PaginatedQuestions({ count = 20 }) {
       setQuestions(r.result);
     };
     f();
-  }, []);
+  }, [count]);
   const onSubmit = async () => {
     setLoading(true);
     if (submitted) {
@@ -124,6 +124,7 @@ function PaginatedQuestions({ count = 20 }) {
       >
         {questions.map((item: any, idx: number) => (
           <Stepper.Step
+            key={item.id}
             allowStepSelect={active > idx || submitted}
             state="stepProgress"
             color="yellow"

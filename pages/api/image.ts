@@ -10,7 +10,7 @@ export const config = {
   },
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const main = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const uploadedData: any = await new Promise((resolve, reject) => {
       const form = new IncomingForm();
@@ -41,3 +41,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.json({ result: questionCount });
   }
 };
+
+export default main;
