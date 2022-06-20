@@ -125,6 +125,14 @@ const Home: NextPage = () => {
         maxRows={20}
         minRows={5}
         onChange={(e) => setQ(e.target.value)}
+        // onChange={(e) => setQ(e.target.value)}
+        onPaste={(e) => {
+          e.preventDefault();
+          const clipboardData =
+            e.clipboardData || (!!window && (window as any).clipboardData);
+          let pastedData = clipboardData.getData('Text');
+          setQ(pastedData.replace(/[\r\n]+/g, ' '));
+        }}
         value={q}
       />
 
@@ -149,6 +157,13 @@ const Home: NextPage = () => {
           minRows={1}
           style={{ width: '100%' }}
           ml={10}
+          onPaste={(e) => {
+            e.preventDefault();
+            const clipboardData =
+              e.clipboardData || (!!window && (window as any).clipboardData);
+            let pastedData = clipboardData.getData('Text');
+            setA(pastedData.replace(/[\r\n]+/g, ' '));
+          }}
         />
       </div>
       <div style={{ display: 'flex', alignItems: 'end' }}>
@@ -172,6 +187,13 @@ const Home: NextPage = () => {
           minRows={1}
           style={{ width: '100%' }}
           ml={10}
+          onPaste={(e) => {
+            e.preventDefault();
+            const clipboardData =
+              e.clipboardData || (!!window && (window as any).clipboardData);
+            let pastedData = clipboardData.getData('Text');
+            setB(pastedData.replace(/[\r\n]+/g, ' '));
+          }}
         />
       </div>
       <div style={{ display: 'flex', alignItems: 'end' }}>
@@ -195,6 +217,13 @@ const Home: NextPage = () => {
           minRows={1}
           style={{ width: '100%' }}
           ml={10}
+          onPaste={(e) => {
+            e.preventDefault();
+            const clipboardData =
+              e.clipboardData || (!!window && (window as any).clipboardData);
+            let pastedData = clipboardData.getData('Text');
+            setC(pastedData.replace(/[\r\n]+/g, ' '));
+          }}
         />
       </div>
       <div style={{ display: 'flex', alignItems: 'end' }}>
@@ -217,6 +246,13 @@ const Home: NextPage = () => {
           minRows={1}
           style={{ width: '100%' }}
           ml={10}
+          onPaste={(e) => {
+            e.preventDefault();
+            const clipboardData =
+              e.clipboardData || (!!window && (window as any).clipboardData);
+            let pastedData = clipboardData.getData('Text');
+            setD(pastedData.replace(/[\r\n]+/g, ' '));
+          }}
           onChange={(e) => setD(e.target.value)}
         />
       </div>
@@ -240,6 +276,13 @@ const Home: NextPage = () => {
           style={{ width: '100%' }}
           ml={10}
           onChange={(e) => setE(e.target.value)}
+          onPaste={(e) => {
+            e.preventDefault();
+            const clipboardData =
+              e.clipboardData || (!!window && (window as any).clipboardData);
+            let pastedData = clipboardData.getData('Text');
+            setE(pastedData.replace(/[\r\n]+/g, ' '));
+          }}
         />
       </div>
       <Textarea
@@ -254,6 +297,13 @@ const Home: NextPage = () => {
         styles={{
           label: { color: 'green' },
           input: { color: 'green' },
+        }}
+        onPaste={(e) => {
+          e.preventDefault();
+          const clipboardData =
+            e.clipboardData || (!!window && (window as any).clipboardData);
+          let pastedData = clipboardData.getData('Text');
+          setHint(pastedData.replace(/[\r\n]+/g, ' '));
         }}
         onChange={(e) => setHint(e.target.value)}
       />
