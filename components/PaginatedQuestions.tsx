@@ -24,7 +24,14 @@ const SubmittedStepper: React.FC<Props> = ({ isCorrect }) => {
   return <>{isCorrect ? <Checks color="green" /> : <X color="red" />}</>;
 };
 
-function PaginatedQuestions({ count = 5 }) {
+function shuffleArray(array: []) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function PaginatedQuestions({ count = 20 }) {
   const [active, setActive] = useState(0);
   const [questions, setQuestions] = useState<any>([]);
   const [value, setValue] = useState('');
@@ -54,6 +61,7 @@ function PaginatedQuestions({ count = 5 }) {
   useEffect(() => {
     const f = async () => {
       const r = await fetcher(`/multi_question?limit=${count}`);
+      shuffleArray(r.result);
       setQuestions(r.result);
     };
     f();
@@ -356,7 +364,7 @@ function PaginatedQuestions({ count = 5 }) {
         </Stepper.Completed>
       </Stepper>
 
-      {/* <pre>{JSON.stringify(questions, null, 2)}</pre> */}
+      <pre>{JSON.stringify(questions, null, 2)}</pre>
     </Container>
   );
 }
