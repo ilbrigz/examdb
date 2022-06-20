@@ -122,6 +122,12 @@ function PaginatedQuestions({ count = 20 }) {
           separator: {
             display: 'none',
           },
+          stepIcon: {
+            '@media (max-width: 768px)': {
+              height: '20px',
+              margin: '3px 3px !important',
+            },
+          },
         }}
       >
         {questions.map((item: any, idx: number) => (
