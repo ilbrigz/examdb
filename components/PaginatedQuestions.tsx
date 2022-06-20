@@ -56,6 +56,9 @@ function PaginatedQuestions({ count = 20 }) {
   useEffect(() => {
     const f = async () => {
       const r = await fetcher(`/multi_question?limit=${count}`);
+      r.result.forEach((q: any) => {
+        shuffleArray(q.choices);
+      });
       shuffleArray(r.result);
       setQuestions(r.result);
     };
@@ -227,6 +230,8 @@ function PaginatedQuestions({ count = 20 }) {
               value={questions[active]?.examinerChoice || undefined}
               onChange={onChoiceSelect}
             >
+              {' '}
+              */ /*{' '}
               {item.choices.map((c: any) => (
                 <Radio
                   value={c.id + ''}
