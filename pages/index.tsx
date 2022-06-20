@@ -87,10 +87,10 @@ const Home: NextPage = () => {
 
       console.log('result', r);
       if (r.error) {
+        alert(r.error);
         return;
       }
     } catch (error) {
-      console.error('error', error);
       return;
     }
     setQ('');
@@ -131,7 +131,7 @@ const Home: NextPage = () => {
           const clipboardData =
             e.clipboardData || (!!window && (window as any).clipboardData);
           let pastedData = clipboardData.getData('Text');
-          setQ(pastedData.replace(/[\r\n]+/g, ' '));
+          setQ(pastedData.trim().replace(/[\r\n]+/g, ' '));
         }}
         value={q}
       />
@@ -162,7 +162,7 @@ const Home: NextPage = () => {
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
             let pastedData = clipboardData.getData('Text');
-            setA(pastedData.replace(/[\r\n]+/g, ' '));
+            setA(pastedData.trim().replace(/[\r\n]+/g, ' '));
           }}
         />
       </div>
@@ -192,7 +192,7 @@ const Home: NextPage = () => {
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
             let pastedData = clipboardData.getData('Text');
-            setB(pastedData.replace(/[\r\n]+/g, ' '));
+            setB(pastedData.trim().replace(/[\r\n]+/g, ' '));
           }}
         />
       </div>
@@ -222,7 +222,7 @@ const Home: NextPage = () => {
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
             let pastedData = clipboardData.getData('Text');
-            setC(pastedData.replace(/[\r\n]+/g, ' '));
+            setC(pastedData.trim().replace(/[\r\n]+/g, ' '));
           }}
         />
       </div>
@@ -251,7 +251,7 @@ const Home: NextPage = () => {
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
             let pastedData = clipboardData.getData('Text');
-            setD(pastedData.replace(/[\r\n]+/g, ' '));
+            setD(pastedData.trim().replace(/[\r\n]+/g, ' '));
           }}
           onChange={(e) => setD(e.target.value)}
         />
@@ -281,7 +281,7 @@ const Home: NextPage = () => {
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
             let pastedData = clipboardData.getData('Text');
-            setE(pastedData.replace(/[\r\n]+/g, ' '));
+            setE(pastedData.trim().replace(/[\r\n]+/g, ' '));
           }}
         />
       </div>
@@ -303,7 +303,7 @@ const Home: NextPage = () => {
           const clipboardData =
             e.clipboardData || (!!window && (window as any).clipboardData);
           let pastedData = clipboardData.getData('Text');
-          setHint(pastedData.replace(/[\r\n]+/g, ' '));
+          setHint(pastedData.trim().replace(/[\r\n]+/g, ' '));
         }}
         onChange={(e) => setHint(e.target.value)}
       />
