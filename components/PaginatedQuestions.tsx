@@ -111,9 +111,14 @@ function PaginatedQuestions({ count = 20 }) {
         styles={{
           steps: {
             display: 'flex',
+
             flexWrap: 'wrap',
             '@media (max-width: 768px)': {
               flexDirection: 'row',
+              maxHeight: '150px',
+              overflowY: 'scroll',
+              msOverflowStyle: 'none' /* Internet Explorer 10+ */,
+              scrollbarWidth: 'none' /* Firefox */,
             },
             div: {
               margin: '0 3px',
