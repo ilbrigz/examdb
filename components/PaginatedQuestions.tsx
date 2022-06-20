@@ -364,7 +364,7 @@ function PaginatedQuestions({ count = 20 }) {
         </Stepper.Completed>
       </Stepper>
 
-      <pre>{JSON.stringify(questions, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(questions, null, 2)}</pre> */}
     </Container>
   );
 }
