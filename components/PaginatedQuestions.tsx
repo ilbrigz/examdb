@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import {
   Stepper,
   Button,
@@ -8,7 +7,6 @@ import {
   Radio,
   RadioGroup,
   Container,
-  Input,
   Textarea,
   ActionIcon,
 } from '@mantine/core';
@@ -34,14 +32,11 @@ function shuffleArray(array: []) {
 function PaginatedQuestions({ count = 20 }) {
   const [active, setActive] = useState(0);
   const [questions, setQuestions] = useState<any>([]);
-  const [value, setValue] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(false);
   const [editingHint, setEditingHint] = useState('');
   const [isEditingHint, setIsEditingHing] = useState(false);
-  const router = useRouter();
-  const { asPath } = useRouter();
   const origin =
     typeof window !== 'undefined' && window.location.origin
       ? window.location.origin
@@ -207,7 +202,11 @@ function PaginatedQuestions({ count = 20 }) {
                 {' '}
                 Q:{' '}
               </Text>
-              <Text>{item.text}</Text>
+              <Text
+                dangerouslySetInnerHTML={{
+                  __html: item.text.replace(/\n/g, '<br/>'),
+                }}
+              ></Text>
             </div>
             <RadioGroup
               required
