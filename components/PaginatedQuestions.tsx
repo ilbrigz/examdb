@@ -24,7 +24,7 @@ const SubmittedStepper: React.FC<Props> = ({ isCorrect }) => {
   return <>{isCorrect ? <Checks color="green" /> : <X color="red" />}</>;
 };
 
-function PaginatedQuestions({ count = 20 }) {
+function PaginatedQuestions({ count = 5 }) {
   const [active, setActive] = useState(0);
   const [questions, setQuestions] = useState<any>([]);
   const [value, setValue] = useState('');
