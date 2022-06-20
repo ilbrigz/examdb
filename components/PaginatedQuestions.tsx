@@ -95,7 +95,15 @@ function PaginatedQuestions({ count = 20 }) {
   };
   return (
     <Container>
-      <Group mt="xl" mb="lg">
+      <Group
+        mt="xl"
+        mb="lg"
+        sx={(theme) => ({
+          '@media (max-width: 768px)': {
+            display: 'none',
+          },
+        })}
+      >
         <Button variant="default" onClick={prevStep}>
           Back
         </Button>
@@ -112,9 +120,14 @@ function PaginatedQuestions({ count = 20 }) {
         onStepClick={setActive}
         breakpoint="sm"
         styles={{
+          root: {
+            '@media (max-width: 768px)': {
+              marginBottom: '100px',
+              marginTop: '10px',
+            },
+          },
           steps: {
             display: 'flex',
-
             flexWrap: 'wrap',
             '@media (max-width: 768px)': {
               flexDirection: 'row',
@@ -362,6 +375,27 @@ function PaginatedQuestions({ count = 20 }) {
           )}
         </Stepper.Completed>
       </Stepper>
+      <Group
+        mt="xl"
+        mb="lg"
+        sx={(theme) => ({
+          position: 'fixed',
+          bottom: 0,
+          '@media (min-width: 768px)': {
+            display: 'none',
+          },
+        })}
+      >
+        <Button variant="default" onClick={prevStep}>
+          Back
+        </Button>
+        <Button onClick={nextStep}>Next step</Button>
+        {submitted && (
+          <Text>
+            Score: {score}/{questions.length}
+          </Text>
+        )}
+      </Group>
 
       {/* <pre>{JSON.stringify(questions, null, 2)}</pre> */}
     </Container>
