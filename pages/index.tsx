@@ -6,12 +6,14 @@ import {
   Radio,
   RadioGroup,
   ActionIcon,
+  Box,
 } from '@mantine/core';
 import { Check } from 'tabler-icons-react';
 import fetcher from '../lib/fetcher';
 import { useState, useRef, useEffect } from 'react';
 import Upload from '../components/Upload';
 import QuestionsPreview from '../components/QuestionsPreview';
+import SelectOrAddCategory from '../components/SelectOrAddCategory';
 
 const Home: NextPage = () => {
   const [q, setQ] = useState('');
@@ -26,6 +28,7 @@ const Home: NextPage = () => {
   const [imageArray, setImageArray] = useState([]);
   const [hint, setHint] = useState('');
   const [category, setCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const [reload, setReaload] = useState(Math.random());
   const onSelectCorrectItem = (ltr: string) => {
     switch (ltr) {
@@ -80,12 +83,10 @@ const Home: NextPage = () => {
       ...(imageUrl && { imgUrl: imageUrl }),
       ...(category && { category }),
       hint,
+      categories: selectedCategories,
     };
-    console.log(data);
     try {
-      const r = await fetcher('/q', data);
-
-      console.log('result', r);
+      const r = await fetcher('/question/single/create', data);
       if (r.error) {
         alert(r.error);
         return;
@@ -104,6 +105,7 @@ const Home: NextPage = () => {
     setCreateObjectURL('');
     setImageArray([]);
     setHint('');
+    setSelectedCategories([]);
     setReaload(Math.random());
   };
   return (
@@ -146,8 +148,9 @@ const Home: NextPage = () => {
           <Check size={40} />
         </ActionIcon>
         <Textarea
-          placeholder="Copy question here"
-          label="Option A"
+          mt={5}
+          placeholder="Required"
+          rightSection="A"
           size="sm"
           value={a}
           required
@@ -176,8 +179,9 @@ const Home: NextPage = () => {
           <Check size={40} />
         </ActionIcon>
         <Textarea
-          placeholder="Copy question here"
-          label="Option B"
+          mt={5}
+          placeholder="Required"
+          rightSection="B"
           size="sm"
           value={b}
           required
@@ -206,8 +210,9 @@ const Home: NextPage = () => {
           <Check size={40} />
         </ActionIcon>
         <Textarea
-          placeholder="Copy question here"
-          label="Option C"
+          mt={5}
+          placeholder="Required"
+          rightSection="C"
           size="sm"
           value={c}
           required
@@ -236,8 +241,9 @@ const Home: NextPage = () => {
           <Check size={40} />
         </ActionIcon>
         <Textarea
-          placeholder="Copy question here"
-          label="Option D"
+          mt={5}
+          placeholder="Required"
+          rightSection="D"
           size="sm"
           required
           value={d}
@@ -266,8 +272,9 @@ const Home: NextPage = () => {
           <Check size={40} />
         </ActionIcon>
         <Textarea
-          placeholder="Copy question here"
-          label="Option E (not required)"
+          mt={5}
+          placeholder="This is Optional"
+          rightSection="E"
           size="sm"
           value={e}
           autosize={true}
@@ -285,32 +292,49 @@ const Home: NextPage = () => {
           }}
         />
       </div>
-      <Textarea
-        placeholder="Copy question here"
-        label="Hint"
-        size="xs"
-        value={hint}
-        autosize={true}
-        maxRows={20}
-        minRows={1}
-        mt={10}
-        styles={{
-          label: { color: 'green' },
-          input: { color: 'green' },
+      <Box
+        mt={5}
+        style={{
+          display: 'flex',
+          alignContent: 'end',
         }}
-        onPaste={(e) => {
-          e.preventDefault();
-          const clipboardData =
-            e.clipboardData || (!!window && (window as any).clipboardData);
-          let pastedData = clipboardData.getData('Text');
-          setHint(pastedData.trim().replace(/[\r\n]+/g, ' '));
-        }}
-        onChange={(e) => setHint(e.target.value)}
-      />
+      >
+        <Textarea
+          placeholder="Copy question here"
+          label="Hint"
+          size="xs"
+          value={hint}
+          autosize={true}
+          maxRows={20}
+          minRows={1}
+          styles={{
+            root: { minWidth: '60%' },
+            label: { color: 'green' },
+            input: { color: 'green' },
+          }}
+          mr={10}
+          onPaste={(e) => {
+            e.preventDefault();
+            const clipboardData =
+              e.clipboardData || (!!window && (window as any).clipboardData);
+            let pastedData = clipboardData.getData('Text');
+            setHint(pastedData.trim().replace(/[\r\n]+/g, ' '));
+          }}
+          onChange={(e) => setHint(e.target.value)}
+        />
+        <Box style={{ flexGrow: 1 }}>
+          <SelectOrAddCategory
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+          />
+        </Box>
+      </Box>
+
       <Button mt={20} onClick={addQuestion}>
         {' '}
         Create Question{' '}
       </Button>
+
       <QuestionsPreview reload={reload} />
     </Container>
   );

@@ -18,20 +18,19 @@ model Quiz {
 }
 
 model Question {
-  id              Int       @id @default(autoincrement())
-  text            String    @unique
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  category        Category? @relation(fields: [categoryId], references: [id])
-  categoryId      Int?      @unique
+  id              Int        @id @default(autoincrement())
+  text            String     @unique
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  category        Category[]
   quizes          Quiz[]
   choices         Choice[]
-  correctChoice   Choice?   @relation("correctItem", fields: [correctChoiceId], references: [id])
+  correctChoice   Choice?    @relation("correctItem", fields: [correctChoiceId], references: [id])
   correctChoiceId Int?
-  checkCount      Int       @default(0)
-  mistakeCount    Int       @default(0)
+  checkCount      Int        @default(0)
+  mistakeCount    Int        @default(0)
   hint            String?
-  img             Image?    @relation(fields: [imgId], references: [id])
+  img             Image?     @relation(fields: [imgId], references: [id])
   imgId           Int?
 }
 
@@ -45,7 +44,7 @@ model Choice {
 
 model Category {
   id       Int        @id @default(autoincrement())
-  name     String
+  name     String     @unique
   Question Question[]
 }
 

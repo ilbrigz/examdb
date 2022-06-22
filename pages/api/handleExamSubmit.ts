@@ -26,6 +26,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
       );
       res.json({ msg: result });
     } catch (err) {
+      res.json({ err });
       console.log(err);
     }
   }

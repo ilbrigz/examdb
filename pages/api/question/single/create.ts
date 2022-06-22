@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../lib/prisma';
+import prisma from '../../../../lib/prisma';
 
 const main = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const { choices, text, category, correctChoice, imgUrl, hint } = req.body;
-    // Process a POST request
+    const { choices, text, category, correctChoice, imgUrl, hint, categories } =
+      req.body;
     try {
       type NewType = Prisma.ImageCreateOrConnectWithoutQuestionInput;
 
@@ -22,18 +22,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
             }),
           },
           category: {
-            connectOrCreate:
-              category !== undefined
-                ? {
-                    where: {
-                      id: category.id,
-                    },
-                    create: {
-                      id: category.id,
-                      name: category.name,
-                    },
-                  }
-                : undefined,
+            connect: categories.map((c: string) => ({ id: parseInt(c) })),
           },
           img: {
             connectOrCreate:
@@ -68,19 +57,6 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
       res.json({ error: 'Question already exists' });
       return;
     }
-
-    return;
-  } else if (req.method === 'GET') {
-    const limit: any = req.query.limit;
-    const Questions = await prisma.question.findMany({
-      orderBy: { id: 'desc' },
-      take: limit ? parseInt(limit) : undefined,
-      include: {
-        choices: true, // Return all fields
-        img: true,
-      },
-    });
-    res.json({ result: Questions });
   }
 };
 

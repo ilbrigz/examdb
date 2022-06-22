@@ -11,7 +11,7 @@ const QuestionsPreview = ({ count = 3, reload }: Props) => {
   const [questions, setQuestions] = useState([]);
   useEffect(() => {
     const f = async () => {
-      const r = await fetcher(`/q?limit=${count}`);
+      const r = await fetcher(`/question/multi/get_ordered?limit=${count}`);
       setQuestions(r.result);
     };
     f();

@@ -9,9 +9,12 @@ import {
   Container,
   Textarea,
   ActionIcon,
+  Badge,
+  Box,
 } from '@mantine/core';
-import { X, Checks, Pencil } from 'tabler-icons-react';
+import { X, Checks, Pencil, Plus, SquarePlus } from 'tabler-icons-react';
 import fetcher from '../lib/fetcher';
+import SelectOrAddCategory from './SelectOrAddCategory';
 type Props = {
   isCorrect: boolean;
   checkCount: number;
@@ -37,6 +40,8 @@ function PaginatedQuestions({ count = 20 }) {
   const [loading, setLoading] = useState(false);
   const [editingHint, setEditingHint] = useState('');
   const [isEditingHint, setIsEditingHing] = useState(false);
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const origin =
     typeof window !== 'undefined' && window.location.origin
       ? window.location.origin
@@ -55,7 +60,7 @@ function PaginatedQuestions({ count = 20 }) {
 
   useEffect(() => {
     const f = async () => {
-      const r = await fetcher(`/multi_question?limit=${count}`);
+      const r = await fetcher(`/question/multi/get_random?limit=${count}`);
       r.result.forEach((q: any) => {
         shuffleArray(q.choices);
       });
@@ -329,10 +334,11 @@ function PaginatedQuestions({ count = 20 }) {
                         radius="xl"
                         size="xs"
                         onClick={async () => {
-                          const r = await fetcher('/single_question/hint', {
+                          const r = await fetcher('/question/single/update', {
                             id: item.id,
                             hint: editingHint,
                           });
+                          console.log(r);
                           let t = [...questions];
                           t[active]['hint'] = r.msg.hint;
                           setQuestions(t);
@@ -356,6 +362,57 @@ function PaginatedQuestions({ count = 20 }) {
                     </>
                   )}
                 </div>
+                <Box
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {item.category.map((c: any) => (
+                    <Badge key={c.id} mr={5}>
+                      {c.name}
+                    </Badge>
+                  ))}
+                  <ActionIcon
+                    color="blue"
+                    size="sm"
+                    variant="light"
+                    onClick={() => setIsAddingCategory(!isAddingCategory)}
+                  >
+                    <Plus />
+                  </ActionIcon>
+                </Box>
+                {isAddingCategory && (
+                  <Box style={{ display: 'flex', alignItems: 'end' }}>
+                    <Box mr={10} style={{ flexGrow: 1 }}>
+                      <SelectOrAddCategory
+                        exclude={item.category}
+                        selectedCategories={selectedCategories}
+                        setSelectedCategories={setSelectedCategories}
+                      />
+                    </Box>
+                    <ActionIcon
+                      mt={5}
+                      size="lg"
+                      variant="filled"
+                      color="blue"
+                      onClick={async () => {
+                        const r = await fetcher('/question/single/update', {
+                          id: item.id,
+                          categories: selectedCategories,
+                        });
+                        console.log('===>', r);
+                        let t = [...questions];
+                        t[active]['category'] = r.msg.category;
+                        setQuestions(t);
+                        setSelectedCategories([]);
+                        setIsEditingHing(false);
+                      }}
+                    >
+                      <SquarePlus />
+                    </ActionIcon>
+                  </Box>
+                )}
               </>
             )}
           </Stepper.Step>
