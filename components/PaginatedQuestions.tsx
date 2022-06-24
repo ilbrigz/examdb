@@ -12,9 +12,10 @@ import {
   Badge,
   Box,
 } from '@mantine/core';
-import { X, Checks, Pencil, Plus, SquarePlus } from 'tabler-icons-react';
+import { X, Checks, Pencil, Plus, SquarePlus, Minus } from 'tabler-icons-react';
 import fetcher from '../lib/fetcher';
 import SelectOrAddCategory from './SelectOrAddCategory';
+import { useRouter } from 'next/router';
 type Props = {
   isCorrect: boolean;
   checkCount: number;
@@ -32,7 +33,7 @@ function shuffleArray(array: []) {
   }
 }
 
-function PaginatedQuestions({ count = 20 }) {
+function PaginatedQuestions({}) {
   const [active, setActive] = useState(0);
   const [questions, setQuestions] = useState<any>([]);
   const [submitted, setSubmitted] = useState(false);
@@ -42,11 +43,11 @@ function PaginatedQuestions({ count = 20 }) {
   const [isEditingHint, setIsEditingHing] = useState(false);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<any>([]);
+  const router = useRouter();
   const origin =
     typeof window !== 'undefined' && window.location.origin
       ? window.location.origin
       : '';
-
   const nextStep = () =>
     setActive((current) => {
       if (!questions[current]?.examinerChoice || active == questions.length) {
@@ -60,15 +61,20 @@ function PaginatedQuestions({ count = 20 }) {
 
   useEffect(() => {
     const f = async () => {
-      const r = await fetcher(`/question/multi/get_random?limit=${count}`);
+      const r = await fetcher(
+        `/question/multi/get_random?` +
+          router.asPath.substring(router.asPath.indexOf('?') + 1)
+      );
       r.result.forEach((q: any) => {
         shuffleArray(q.choices);
       });
-      shuffleArray(r.result);
+      if (router.query.take_recent === '1') {
+        shuffleArray(r.result);
+      }
       setQuestions(r.result);
     };
     f();
-  }, [count]);
+  }, []);
   const onSubmit = async () => {
     setLoading(true);
     if (submitted) {
@@ -379,7 +385,7 @@ function PaginatedQuestions({ count = 20 }) {
                     variant="light"
                     onClick={() => setIsAddingCategory(!isAddingCategory)}
                   >
-                    <Plus />
+                    {!isAddingCategory ? <Plus /> : <Minus />}
                   </ActionIcon>
                 </Box>
                 {isAddingCategory && (
