@@ -60,6 +60,7 @@ function PaginatedQuestions({}) {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   useEffect(() => {
+    console.log(router);
     const f = async () => {
       const r = await fetcher(
         `/question/multi/get_random?` +
@@ -68,14 +69,14 @@ function PaginatedQuestions({}) {
       r.result.forEach((q: any) => {
         shuffleArray(q.choices);
       });
-      if (router.query.take_recent === '1') {
+      if (router.query.take_recent !== '1') {
         console.log('shuffling', router.query.take_recent === '1');
         shuffleArray(r.result);
       }
       setQuestions(r.result);
     };
     f();
-  }, []);
+  }, [router.isReady, router.query]);
   const onSubmit = async () => {
     setLoading(true);
     if (submitted) {
