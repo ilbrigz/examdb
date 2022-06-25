@@ -15,7 +15,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
       if (!category) {
         idsToFetch = await prisma.$queryRaw`select id from public."Question"  ${
           take_recent
-            ? Prisma.sql`order by "createdAt"`
+            ? Prisma.sql`order by "createdAt" desc`
             : Prisma.sql`order by Random()`
         } limit ${parseInt(limit)}`;
       } else {
@@ -25,7 +25,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
             t
           )}))) ${
             take_recent
-              ? Prisma.sql`order by "createdAt" limit ${parseInt(limit)}`
+              ? Prisma.sql`order by "createdAt" desc limit ${parseInt(limit)}`
               : Prisma.sql`order by Random() limit ${parseInt(limit)}`
           }`;
       }
@@ -43,7 +43,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
         ...(take_recent
           ? {
               orderBy: {
-                createdAt: 'asc',
+                id: 'desc',
               },
             }
           : {}),
