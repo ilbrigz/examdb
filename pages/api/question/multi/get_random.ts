@@ -13,10 +13,11 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       let idsToFetch: any;
       if (!category) {
-        idsToFetch =
-          await prisma.$queryRaw`select id from public."Question" where id in (select "B" from public."_CategoryToQuestion" where "A" in (select id from public."Category" where name in (select name from public."Category"))) ${
-            take_recent ? Prisma.empty : Prisma.sql`order by Random()`
-          } limit ${parseInt(limit)}`;
+        idsToFetch = await prisma.$queryRaw`select id from public."Question"  ${
+          take_recent
+            ? Prisma.sql`order by "createdAt"`
+            : Prisma.sql`order by Random()`
+        } limit ${parseInt(limit)}`;
       } else {
         const t = Array.isArray(category) ? category : [category];
         idsToFetch =
@@ -24,7 +25,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
             t
           )}))) ${
             take_recent
-              ? Prisma.sql`limit ${parseInt(limit)}`
+              ? Prisma.sql`order by "createdAt" limit ${parseInt(limit)}`
               : Prisma.sql`order by Random() limit ${parseInt(limit)}`
           }`;
       }
@@ -42,7 +43,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
         ...(take_recent
           ? {
               orderBy: {
-                createdAt: 'desc',
+                createdAt: 'asc',
               },
             }
           : {}),
