@@ -60,7 +60,9 @@ function PaginatedQuestions({}) {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   useEffect(() => {
-    console.log(router);
+    if (!router.isRead) {
+      return;
+    }
     const f = async () => {
       const r = await fetcher(
         `/question/multi/get_random?` +
