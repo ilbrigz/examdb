@@ -15,13 +15,17 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
       let idsToFetch: any;
       if (!category) {
         idsToFetch =
-          await prisma.$queryRaw`select id from public."Question" where id in (select "B" from public."_CategoryToQuestion" where "A" in (select id from public."Category" where name in (select name from public."Category")))`;
+          await prisma.$queryRaw`select id from public."Question" where id in (select "B" from public."_CategoryToQuestion" where "A" in (select id from public."Category" where name in (select name from public."Category"))) ${
+            take_recent ? Prisma.empty : Prisma.sql`order by Random()`
+          } limit ${parseInt(limit)}`;
       } else {
         const t = Array.isArray(category) ? category : [category];
         idsToFetch =
           await prisma.$queryRaw`select id from public."Question" where id in (select "B" from public."_CategoryToQuestion" where "A" in (select id from public."Category" where name in (${Prisma.join(
             t
-          )})))`;
+          )}))) ${
+            take_recent ? Prisma.empty : Prisma.sql`order by Random()`
+          } limit ${parseInt(limit)}`;
       }
 
       const Questions = await prisma.question.findMany({
