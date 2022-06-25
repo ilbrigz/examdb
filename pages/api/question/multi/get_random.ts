@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
+import { Prisma } from '@prisma/client';
 
 const main = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log(req.query, '<====');
   if (req.method === 'GET') {
     const limit: any = req.query.limit;
     const category: any = req.query.category;
@@ -12,25 +12,23 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-      const idsToFetch: any =
-        await prisma.$queryRaw`SELECT id FROM "public"."Question" Order BY random() limit ${parseInt(
-          limit
-        )}`;
+      let idsToFetch: any;
+      if (!category) {
+        idsToFetch =
+          await prisma.$queryRaw`select id from public."Question" where id in (select "B" from public."_CategoryToQuestion" where "A" in (select id from public."Category" where name in (select name from public."Category")))`;
+      } else {
+        const t = Array.isArray(category) ? category : [category];
+        idsToFetch =
+          await prisma.$queryRaw`select id from public."Question" where id in (select "B" from public."_CategoryToQuestion" where "A" in (select id from public."Category" where name in (${Prisma.join(
+            t
+          )})))`;
+      }
 
       const Questions = await prisma.question.findMany({
         where: {
           ...(take_recent
             ? {}
             : { id: { in: idsToFetch.map((q: any) => q.id) } }),
-          ...(category && {
-            category: {
-              some: {
-                name: {
-                  in: Array.isArray(category) ? category : [category],
-                },
-              },
-            },
-          }),
         },
         include: {
           choices: true, // Return all fields
