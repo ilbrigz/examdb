@@ -60,7 +60,7 @@ function PaginatedQuestions({}) {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   useEffect(() => {
-    if (!router.isRead) {
+    if (!router.isReady) {
       return;
     }
     const f = async () => {
