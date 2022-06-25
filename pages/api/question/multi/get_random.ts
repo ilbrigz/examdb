@@ -10,7 +10,6 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
     if (parseInt(req.query.take_recent as string) === 1) {
       take_recent = true;
     }
-
     try {
       let idsToFetch: any;
       if (!category) {
@@ -24,15 +23,15 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
           await prisma.$queryRaw`select id from public."Question" where id in (select "B" from public."_CategoryToQuestion" where "A" in (select id from public."Category" where name in (${Prisma.join(
             t
           )}))) ${
-            take_recent ? Prisma.empty : Prisma.sql`order by Random()`
-          } limit ${parseInt(limit)}`;
+            take_recent
+              ? Prisma.sql`limit ${parseInt(limit)}`
+              : Prisma.sql`order by Random() limit ${parseInt(limit)}`
+          }`;
       }
 
       const Questions = await prisma.question.findMany({
         where: {
-          ...(take_recent
-            ? {}
-            : { id: { in: idsToFetch.map((q: any) => q.id) } }),
+          id: { in: idsToFetch.map((q: any) => q.id) },
         },
         include: {
           choices: true, // Return all fields
