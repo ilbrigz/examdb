@@ -69,6 +69,7 @@ function PaginatedQuestions({}) {
         shuffleArray(q.choices);
       });
       if (router.query.take_recent === '1') {
+        console.log('shuffling', router.query.take_recent === '1');
         shuffleArray(r.result);
       }
       setQuestions(r.result);
