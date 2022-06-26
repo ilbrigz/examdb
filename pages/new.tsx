@@ -129,6 +129,9 @@ const NewQuestion: NextPage = () => {
         onChange={(e) => setQ(e.target.value)}
         // onChange={(e) => setQ(e.target.value)}
         onPaste={(e) => {
+          if (q) {
+            return;
+          }
           e.preventDefault();
           const clipboardData =
             e.clipboardData || (!!window && (window as any).clipboardData);
@@ -161,6 +164,9 @@ const NewQuestion: NextPage = () => {
           style={{ width: '100%' }}
           ml={10}
           onPaste={(e) => {
+            if (a) {
+              return;
+            }
             e.preventDefault();
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
@@ -192,6 +198,9 @@ const NewQuestion: NextPage = () => {
           style={{ width: '100%' }}
           ml={10}
           onPaste={(e) => {
+            if (b) {
+              return;
+            }
             e.preventDefault();
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
@@ -223,6 +232,9 @@ const NewQuestion: NextPage = () => {
           style={{ width: '100%' }}
           ml={10}
           onPaste={(e) => {
+            if (c) {
+              return;
+            }
             e.preventDefault();
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
@@ -253,6 +265,9 @@ const NewQuestion: NextPage = () => {
           style={{ width: '100%' }}
           ml={10}
           onPaste={(e) => {
+            if (d) {
+              return;
+            }
             e.preventDefault();
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
@@ -284,6 +299,9 @@ const NewQuestion: NextPage = () => {
           ml={10}
           onChange={(e) => setE(e.target.value)}
           onPaste={(e) => {
+            if (e) {
+              return;
+            }
             e.preventDefault();
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
@@ -314,6 +332,9 @@ const NewQuestion: NextPage = () => {
           }}
           mr={10}
           onPaste={(e) => {
+            if (hint) {
+              return;
+            }
             e.preventDefault();
             const clipboardData =
               e.clipboardData || (!!window && (window as any).clipboardData);
