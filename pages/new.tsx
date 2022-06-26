@@ -298,13 +298,14 @@ const NewQuestion: NextPage = () => {
           style={{ width: '100%' }}
           ml={10}
           onChange={(e) => setE(e.target.value)}
-          onPaste={(e) => {
+          onPaste={(event) => {
             if (e) {
               return;
             }
-            e.preventDefault();
+            event.preventDefault();
             const clipboardData =
-              e.clipboardData || (!!window && (window as any).clipboardData);
+              event.clipboardData ||
+              (!!window && (window as any).clipboardData);
             let pastedData = clipboardData.getData('Text');
             setE(pastedData.trim().replace(/[\r\n]+/g, ' '));
           }}
