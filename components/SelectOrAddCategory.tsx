@@ -65,6 +65,7 @@ const SelectOrAddCategory = ({
         clearable
         onChange={setSelectedCategories}
         data={categories}
+        searchable
         styles={{ label: { width: '100%' } }}
         label={
           <Label

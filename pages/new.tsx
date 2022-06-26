@@ -105,7 +105,7 @@ const NewQuestion: NextPage = () => {
     setCreateObjectURL('');
     setImageArray([]);
     setHint('');
-    // setSelectedCategories([]);
+    setSelectedCategories([]);
     setReaload(Math.random());
   };
   return (
