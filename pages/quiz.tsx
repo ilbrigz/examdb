@@ -3,7 +3,7 @@ import PaginatedQuestions from '../components/PaginatedQuestions';
 
 type Props = {};
 
-const quiz = (props: Props) => {
+const Quiz = (props: Props) => {
   useEffect(() => {
     window.onbeforeunload = function () {
       return confirm('Are you sure you want to reload? Progress will be lost.');
@@ -16,4 +16,4 @@ const quiz = (props: Props) => {
   );
 };
 
-export default quiz;
+export default Quiz;
