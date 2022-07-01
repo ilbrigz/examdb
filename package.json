@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mantine/core": "^4.2.9",
+    "@mantine/hooks": "^4.2.11",
     "@mantine/next": "^4.2.9",
     "@prisma/client": "^3.15.2",
     "@types/formidable": "^2.0.5",

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useScrollIntoView } from '@mantine/hooks';
 import {
   Stepper,
   Button,
@@ -32,6 +33,20 @@ function shuffleArray(array: []) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+const visibility = function (ele: any, container: any) {
+  if (!ele || !container) {
+    return;
+  }
+  const { bottom, top } = ele.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+
+  const t = {
+    isVisible: containerRect.top <= top && containerRect.bottom >= bottom,
+    isBelow: containerRect.top <= top,
+    isAbove: containerRect.bottom >= bottom,
+  };
+  return t;
+};
 
 function PaginatedQuestions({}) {
   const [active, setActive] = useState(0);
@@ -44,21 +59,58 @@ function PaginatedQuestions({}) {
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const router = useRouter();
+  const stepRef = useRef<any>();
+  const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView({
+    axis: 'y',
+    duration: 200,
+  });
+
   const origin =
     typeof window !== 'undefined' && window.location.origin
       ? window.location.origin
       : '';
-  const nextStep = () =>
+  const nextStep = () => {
     setActive((current) => {
       if (!questions[current]?.examinerChoice || active == questions.length) {
         return current;
       }
       return current < questions.length ? current + 1 : current;
     });
+  };
 
-  const prevStep = () =>
+  const prevStep = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
+  };
+  useEffect(() => {
+    updateStep(active + 1 + '');
+    console.log('active', active + 1);
+  }, [active]);
 
+  const updateStep = (stepNo: string) => {
+    // console.log(stepRef.current);
+    const div: HTMLElement[] | null = (stepRef.current as any).querySelectorAll(
+      'div'
+    );
+
+    let stepsContainer = (stepRef.current as any).querySelector('div');
+    const current = stepsContainer.querySelector(
+      '.mantine-Stepper-stepProgress'
+    );
+    if (!current || !stepsContainer) return;
+
+    const p = visibility(current, stepsContainer);
+    console.log(p);
+    if (p?.isVisible == false) {
+      console.log('scrolling into view');
+      targetRef.current = current;
+      scrollableRef.current = stepsContainer;
+      if (p?.isBelow) {
+        scrollIntoView({ alignment: 'center' });
+      } else {
+        scrollIntoView();
+      }
+    }
+  };
   useEffect(() => {
     if (!router.isReady) {
       return;
@@ -134,6 +186,7 @@ function PaginatedQuestions({}) {
       </Group>
 
       <Stepper
+        ref={stepRef}
         active={active}
         onStepClick={setActive}
         breakpoint="sm"
@@ -147,9 +200,11 @@ function PaginatedQuestions({}) {
           steps: {
             display: 'flex',
             flexWrap: 'wrap',
+            maxHeight: '120px',
+            overflowY: 'scroll',
             '@media (max-width: 768px)': {
               flexDirection: 'row',
-              maxHeight: '150px',
+              maxHeight: '100px',
               overflowY: 'scroll',
               msOverflowStyle: 'none' /* Internet Explorer 10+ */,
               scrollbarWidth: 'none' /* Firefox */,

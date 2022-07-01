@@ -132,10 +132,10 @@
     "react-popper" "^2.2.5"
     "react-textarea-autosize" "^8.3.2"
 
-"@mantine/hooks@4.2.9":
-  "integrity" "sha512-oLtlSXkl99vPGBTR9yoVCWoCQ25Bc4WhPci31iERMLMM/0fz85CZayQcAC4etq6un6rDiRNu6jq0YB1S5stmPg=="
-  "resolved" "https://registry.npmjs.org/@mantine/hooks/-/hooks-4.2.9.tgz"
-  "version" "4.2.9"
+"@mantine/hooks@^4.2.11", "@mantine/hooks@4.2.9":
+  "integrity" "sha512-kwbMbpT8ErroVSLK7fxEN0SypvK0rEErYyHKfKSMah5buWSu2F/diIuafL5UjvN7aQfS0ZJnqnH/avUN25H3qg=="
+  "resolved" "https://registry.npmjs.org/@mantine/hooks/-/hooks-4.2.11.tgz"
+  "version" "4.2.11"
 
 "@mantine/next@^4.2.9":
   "integrity" "sha512-avbxQeR9EerSHJ3HOg7rPAyBUoJ3/ifvYifyP/Sd6ap3hGzF1a/NN4tSRjoRmz1jTyAdmKIhL0k0alwi1OqA2A=="
