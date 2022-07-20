@@ -1,5 +1,5 @@
 import { Accordion, Button, Radio, RadioGroup, Input } from '@mantine/core';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import fetcher from '../lib/fetcher';
 
 type NewType = Dispatch<SetStateAction<string>>;
@@ -20,6 +20,7 @@ export default function PrivatePage({
   setImageUrl: NewType;
 }) {
   const [image, setImage] = useState('');
+  const inputRef = useRef<any>(null);
 
   const origin =
     typeof window !== 'undefined' && window.location.origin
@@ -41,6 +42,7 @@ export default function PrivatePage({
       return;
     }
     body.append('file', image);
+    console.log(body);
     const response = await fetch('/api/image', {
       method: 'POST',
       body,
@@ -50,6 +52,7 @@ export default function PrivatePage({
     setCreateObjectURL('');
     const images = await fetcher('/image');
     setImageArray(images.result);
+    inputRef.current.value = null;
   };
 
   return (
@@ -88,7 +91,12 @@ export default function PrivatePage({
         <img src={createObjectURL} style={{ maxWidth: '200px' }} />
         <>
           <h5>Select Image</h5>
-          <input type="file" name="myImage" onChange={uploadToClient} />
+          <input
+            ref={inputRef}
+            type="file"
+            name="myImage"
+            onChange={uploadToClient}
+          />
           <Button
             className="btn btn-primary"
             type="submit"

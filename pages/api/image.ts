@@ -1,5 +1,4 @@
 import { IncomingForm } from 'formidable';
-import { promises as fs } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../lib/prisma';
 var mv = require('mv');
@@ -14,7 +13,6 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const uploadedData: any = await new Promise((resolve, reject) => {
       const form = new IncomingForm();
-
       form.parse(req, (err, fields, files: any) => {
         if (err) return reject(err);
         var oldPath = files.file.filepath;
@@ -28,6 +26,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
         resolve({ newPath: newPath.replace('public/', ''), files });
       });
     });
+
     await prisma.image.create({
       data: {
         url: uploadedData.newPath,

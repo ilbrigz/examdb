@@ -5,7 +5,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 model Quiz {
@@ -39,7 +40,6 @@ model Choice {
   name        String     @unique
   correctItem Question[] @relation("correctItem")
   questions   Question[]
-
 }
 
 model Category {
@@ -53,4 +53,21 @@ model Image {
   createdAt DateTime   @default(now())
   url       String     @unique
   Question  Question[]
+}
+
+model Pdf {
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  url          String    @unique
+  keywords     Keyword[]
+  text         String
+  originalName String    @unique
+  label        String
+}
+
+model Keyword {
+  id    Int    @id @default(autoincrement())
+  text  String @unique
+  Pdf   Pdf?   @relation(fields: [pdfId], references: [id])
+  pdfId Int?
 }
