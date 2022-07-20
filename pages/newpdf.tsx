@@ -47,7 +47,7 @@ export const dropzoneChildren = (status: DropzoneStatus, file: any) => (
     </div>
   </Group>
 );
-function sandbox({}: Props) {
+function NewPdf({}: Props) {
   const theme = useMantineTheme();
   const [file, setFile] = useState('');
   const [label, setLabel] = useState('');
@@ -139,4 +139,4 @@ function sandbox({}: Props) {
   );
 }
 
-export default sandbox;
+export default NewPdf;

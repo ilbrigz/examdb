@@ -14,7 +14,7 @@ import { Text } from '@mantine/core';
 
 type Props = {};
 
-const memos = (props: Props) => {
+const Memos = (props: Props) => {
   const [memos, setMemos] = useState<any>([]);
   const [inputValue, setInputValue] = useState<any>('');
   const origin =
@@ -104,4 +104,4 @@ const memos = (props: Props) => {
   );
 };
 
-export default memos;
+export default Memos;
