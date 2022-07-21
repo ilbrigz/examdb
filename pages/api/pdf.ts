@@ -44,7 +44,6 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     });
 
-    console.log(uploadedData.body);
     let dataBuffer = fs.readFileSync(`public/${uploadedData.newPath}`);
     pdf(dataBuffer).then(async function (data: any) {
       const t = data.text.replace(/\s{2,}/g, ' ');
