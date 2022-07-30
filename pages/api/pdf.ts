@@ -25,7 +25,6 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
           return reject(err);
         }
         var oldPath = files.file.filepath;
-        console.log(files.file.filepath);
         var newPath = `public/uploads/${
           Date.now() + '--' + files.file.originalFilename
         }`;
@@ -46,7 +45,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
 
     let dataBuffer = fs.readFileSync(`public/${uploadedData.newPath}`);
     pdf(dataBuffer).then(async function (data: any) {
-      const t = data.text.replace(/\s{2,}/g, ' ');
+      const t = data.text.replace(/\s{2,}|\n/g, ' ').replaceAll('\u0000', '');
       try {
         await prisma.pdf.create({
           data: {
@@ -59,6 +58,10 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
         res.json({ data: uploadedData });
       } catch (error) {
         if (error) {
+          if (error) {
+            console.error(error);
+            res.json({ error: 'PDF already Exists' });
+          }
           fsExtra.remove(`public/${uploadedData.newPath}`, (err: any) => {
             if (err) {
               console.error(err);

@@ -10,6 +10,7 @@ const main = async (req: NextApiRequest, res: NextApiResponse) => {
           url: true,
           label: true,
         },
+        orderBy: [{ createdAt: 'asc' }],
       });
       res.json({ data: result });
     } catch (err) {
